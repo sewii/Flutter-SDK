@@ -86,6 +86,28 @@ class RtcEngine with RtcEngineInterface {
     return _engine;
   }
 
+
+  @override
+  Future<void> setExternalVideoSource(bool enable, bool useTexture, bool pushMode) {
+    return _invokeMethod('setExternalVideoSource', {
+      'enable': enable,
+      'useTexture': useTexture,
+      'pushMode': pushMode,
+    });
+  }
+
+  @override
+  Future<void> pushExternalVideoFrame(int textureID, int format, List<Float> transform, int stride, int height, List<Uint8> byteArray) {
+    return _invokeMethod('pushExternalVideoFrame', {
+      'textureID': textureID,
+      'format': format,
+      'transform': transform,
+      'stride': stride,
+      'height': height,
+      'byteArray': byteArray
+    });
+  }
+
   @override
   Future<void> destroy() {
     RtcChannel.destroyAll();

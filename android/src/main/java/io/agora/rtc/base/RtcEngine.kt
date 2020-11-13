@@ -4,6 +4,8 @@ import android.content.Context
 import io.agora.rtc.*
 import io.agora.rtc.internal.EncryptionConfig
 import io.agora.rtc.models.UserInfo
+import io.agora.rtc.video.AgoraVideoFrame
+
 
 class IRtcEngine {
     interface RtcEngineInterface : RtcUserInfoInterface, RtcAudioInterface, RtcVideoInterface,
@@ -107,6 +109,11 @@ class IRtcEngine {
         fun setDefaultMuteAllRemoteVideoStreams(params: Map<String, *>, callback: Callback)
 
         fun setBeautyEffectOptions(params: Map<String, *>, callback: Callback)
+
+        fun setExternalVideoSource(params: Map<String, *>, callback: Callback)
+
+        fun pushExternalVideoFrame(params: Map<String, *>, callback: Callback)
+
     }
 
     interface RtcAudioMixingInterface {
@@ -885,4 +892,24 @@ class RtcEngineManager(
         }
         callback.code(code)
     }
+
+    override fun pushExternalVideoFrame(params: Map<String, *>, callback: Callback) {
+        val frame = AgoraVideoFrame()
+        frame.textureID = params["textureID"] as? Int ?: 0
+        frame.format = params["format"] as? Int ?: 10
+        frame.transform = params["transform"] as? FloatArray
+        frame.stride = params["stride"] as? Int ?: 0
+        frame.height = params["height"] as? Int ?: 0
+        frame.buf = params["height"] as? ByteArray
+        frame.timeStamp = System.currentTimeMillis()
+        engine?.pushExternalVideoFrame(frame)
+        callback.code(1)
+    }
+
+    override fun setExternalVideoSource(params: Map<String, *>, callback: Callback) {
+        engine?.setExternalVideoSource(params["enable"] as? Boolean ?: true, params["useTexture"] as? Boolean ?: false, params["pushMode"] as? Boolean ?: true)
+        callback.code(1)
+    }
+
+
 }
