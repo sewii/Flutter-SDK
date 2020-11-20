@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:flutter/services.dart';
 
@@ -97,7 +98,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> pushExternalVideoFrame(int textureID, int format, List<Float> transform, int stride, int height, List<Uint8> byteArray) {
+  Future<void> pushExternalVideoFrame(int textureID, int format, Float64List transform, int stride, int height, Uint8List byteArray) {
     return _invokeMethod('pushExternalVideoFrame', {
       'textureID': textureID,
       'format': format,
